@@ -1,0 +1,12 @@
+UI:
+  ✔ List all inbox's songs @done(21-08-08 14:17)
+  ✔ List all categories and sub-hierarchies @done(21-08-08 14:17)
+  ✔ Plug the data! @done(21-08-08 14:55)
+  ✔ Style with the vibes of https://ishadeed.com/article/css-grid-minmax/ @high @done(21-08-09 17:02)
+
+Features:
+  ☐ Click a done button to remove the song from inbox and move to the next @critical @today
+  ✔ Select playlists in which to add the song @critical @today @done(21-08-09 17:03)
+  ☐ Define an inbox playlist @low
+  ☐ Define categories @low
+  ☐ Play the preview of the song @low
