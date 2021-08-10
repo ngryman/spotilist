@@ -2,6 +2,7 @@
   import Sidebar from "./components/Sidebar.svelte";
   import PlaylistItem from "./components/PlaylistItem.svelte";
   import { playlists } from "./stores/playlists";
+  import ApplyButton from "./components/ApplyButton.svelte";
 
   $: listingPlaylist = $playlists.filter((p) => p.name !== "INBOX");
 </script>
@@ -14,6 +15,7 @@
         <PlaylistItem {playlist} />
       {/each}
     </ul>
+    <ApplyButton />
   </article>
 </main>
 
@@ -33,20 +35,21 @@
   }
 
   article {
+    overflow-y: scroll;
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
+    background: #191414;
   }
 
   ul {
     --padding: 20px;
 
-    overflow-y: scroll;
     display: grid;
     justify-content: center;
-    padding: var(--padding) var(--padding);
+    padding: var(--padding) var(--padding) 200px var(--padding);
     gap: var(--padding);
     grid-template-columns: repeat(auto-fit, 120px);
     grid-template-rows: repeat(auto-fit, minmax(min-content, 140px));
-    background: #191414;
   }
 </style>

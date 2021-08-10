@@ -1,4 +1,4 @@
-import type { Playlist, Track } from "./types";
+import type { Device, Playlist, Track } from "./types";
 import { API_TOKEN } from "./constants";
 
 export async function fetchPlaylists(): Promise<Playlist[]> {
@@ -72,6 +72,21 @@ export async function removeTrackFromPlaylist(
   });
 }
 
+export async function fetchDevices(): Promise<Device[]> {
+  const { devices } = await fetchApi(`me/player/devices`);
+  return devices;
+}
+
+export async function play(device: Device, track: Track): Promise<void> {
+  fetchApi(`me/player/play?device_id=${device.id}`, {
+    method: "PUT",
+    body: {
+      uris: [`spotify:track:${track.id}`],
+      position_ms: 10000,
+    },
+  });
+}
+
 type FetchApiOptions = {
   method?: string;
   search?: {};
@@ -98,7 +113,11 @@ async function fetchApi<T>(
       body: body ? JSON.stringify(body) : undefined,
     }
   );
-  const data = await res.json();
 
-  return data;
+  if (res.status !== 204) {
+    const data = await res.json();
+    return data;
+  }
+
+  return undefined;
 }

@@ -24,6 +24,7 @@ export const inboxPlaylist = derived<Readable<Playlist[]>, Playlist>(
     }
   }
 );
+
 async function loadPlaylists(set: Subscriber<Playlist[]>): Promise<void> {
   const playlists = await fetchPlaylists();
   set(playlists);

@@ -19,3 +19,9 @@ export type PlaylistItemToggleEventDetail = {
   playlist: Playlist;
   selected: boolean;
 };
+
+export type Device = {
+  id: string;
+  type: string;
+  name: string;
+};
