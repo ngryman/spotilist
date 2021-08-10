@@ -14,3 +14,8 @@ export type Track = {
   imageUrl: string;
   link: string;
 };
+
+export type PlaylistItemToggleEventDetail = {
+  playlist: Playlist;
+  selected: boolean;
+};
