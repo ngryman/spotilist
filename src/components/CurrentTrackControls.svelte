@@ -10,13 +10,8 @@
 
 <track-controls>
   <button on:click={play}>
-    <svg
-      version="1.1"
-      viewBox="0 0 30 30"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-    >
-      <polygon points="10,5 25,15 10,25" fill="#eee" />
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <use href="#icon-play" fill="#eee" />
     </svg>
   </button>
 </track-controls>
@@ -33,6 +28,11 @@
     height: 30px;
     will-change: transform;
     transition: transform 200ms;
+  }
+
+  button svg {
+    width: 100%;
+    height: 100%;
   }
 
   button:hover:not(:disabled) svg {
