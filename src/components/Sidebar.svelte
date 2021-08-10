@@ -19,7 +19,7 @@
 
 <style>
   sidebar {
-    width: 200px;
+    overflow-y: scroll;
     background: #111;
   }
 
@@ -29,6 +29,9 @@
   }
 
   li {
+    overflow: hidden;
     line-height: 1.5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>

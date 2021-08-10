@@ -2,7 +2,11 @@ import type { Playlist, Track } from "./types";
 import { API_TOKEN } from "./constants";
 
 export async function fetchPlaylists(): Promise<Playlist[]> {
-  const { items } = await fetchApi("me/playlists");
+  const { items } = await fetchApi("me/playlists", {
+    search: {
+      limit: 50,
+    },
+  });
 
   const playlists = items
     .filter((item: any) => item.owner.display_name === "ngryman")
@@ -10,9 +14,10 @@ export async function fetchPlaylists(): Promise<Playlist[]> {
       id: item.id,
       name: item.name,
       description: item.description,
-      imageUrl: item.images
-        ? item.images[Math.min(1, item.images.length - 1)].url
-        : "",
+      imageUrl:
+        item.images.length > 0
+          ? item.images[Math.min(1, item.images.length - 1)].url
+          : "",
       link: item.href,
       total_tracks: item.tracks.total,
     }));
@@ -23,7 +28,9 @@ export async function fetchPlaylists(): Promise<Playlist[]> {
 export async function loadTracksOf(playlist: Playlist): Promise<Track[]> {
   const fields = "items(track(id,name,href,album(images),artists(name)))";
   const { items } = await fetchApi(`playlists/${playlist.id}/tracks`, {
-    fields,
+    search: {
+      fields,
+    },
   });
 
   const tracks = items.map(({ track: item }) => {
@@ -67,7 +74,7 @@ export async function removeTrackFromPlaylist(
 
 type FetchApiOptions = {
   method?: string;
-  fields?: string;
+  search?: {};
   body?: {};
 };
 
@@ -75,10 +82,14 @@ async function fetchApi<T>(
   path: string,
   options: FetchApiOptions = {}
 ): Promise<T> {
-  const { fields, method = "GET", body } = options;
+  const { method = "GET", search = {}, body } = options;
+
+  const searchParams = new URLSearchParams(search).toString();
 
   const res = await fetch(
-    `https://api.spotify.com/v1/${path}${fields ? `?fields=${fields}` : ""}`,
+    `https://api.spotify.com/v1/${path}${
+      searchParams ? `?${searchParams}` : ""
+    }`,
     {
       method,
       headers: {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Playlist } from "../types";
   import { selectedPlaylists, togglePlaylist } from "../stores/playlists";
+  import playlistImg from "../assets/playlist.svg";
 
   export let playlist: Playlist;
   $: selected = Boolean($selectedPlaylists.find((p) => p.id === playlist.id));
@@ -11,7 +12,7 @@
 </script>
 
 <playlist-item class={selected && "selected"} on:click={handleClick}>
-  <img src={playlist.imageUrl} alt="" />
+  <img src={playlist.imageUrl || playlistImg} alt="" />
   <span>{playlist.name} <em>({playlist.total_tracks})</em></span>
   <svg
     version="1.1"
@@ -35,7 +36,7 @@
   playlist-item {
     position: relative;
     box-shadow: #111 4px 4px 4px;
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 10px;
     background: #242424;
     cursor: pointer;

@@ -26,7 +26,8 @@
 
   main {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 100% 100%;
     height: 100vh;
     background: #000;
   }
@@ -39,12 +40,13 @@
   ul {
     --padding: 20px;
 
+    overflow-y: scroll;
     display: grid;
     justify-content: center;
     padding: var(--padding) var(--padding);
     gap: var(--padding);
     grid-template-columns: repeat(auto-fit, 120px);
-    grid-template-rows: repeat(auto-fit, minmax(120px, min-content));
+    grid-template-rows: repeat(auto-fit, minmax(min-content, 140px));
     background: #191414;
   }
 </style>
