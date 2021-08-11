@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { Track } from "../types";
-  import CurrentTrackControls from "./CurrentTrackControls.svelte";
-  import TrackView from "./TrackView.svelte";
+  import type { Track } from "../../types";
+  import Controls from "./Controls.svelte";
+  import TrackPreview from "./TrackPreview.svelte";
 
   export let track: Track;
 </script>
 
 <track-item>
-  <TrackView {track} />
-  <CurrentTrackControls />
+  <TrackPreview {track} />
+  <Controls />
 </track-item>
 
 <style>

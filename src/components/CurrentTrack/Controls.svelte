@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { currentTrack } from "../stores/tracks";
-  import { selectedPlaylists } from "../stores/playlists";
-  import { playTrack } from "../stores/playback";
+  import { currentTrack } from "../../stores/tracks";
+  import { selectedPlaylists } from "../../stores/playlists";
+  import { playTrack } from "../../stores/playback";
 
   function play() {
     playTrack($currentTrack);

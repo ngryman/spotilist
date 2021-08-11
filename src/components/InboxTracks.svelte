@@ -1,6 +1,6 @@
 <script lang="ts">
   import { currentTrack, inboxTracks } from "../stores/tracks";
-  import CurrentTrackItem from "./CurrentTrackItem.svelte";
+  import { CurrentTrack } from "./CurrentTrack";
 
   $: $currentTrack = $inboxTracks[0];
 </script>
@@ -9,7 +9,7 @@
   <ul>
     {#each $inboxTracks as track, i}
       {#if i === 0}
-        <CurrentTrackItem {track} />
+        <li><CurrentTrack {track} /></li>
       {:else}
         <li>{track.name}</li>
       {/if}

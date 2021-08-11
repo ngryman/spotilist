@@ -17,7 +17,7 @@
 
 <button {disabled} on:click={handleClick}>
   <svg xmlns="http://www.w3.org/2000/svg">
-    <use href="#icon-check" fill={disabled ? "#555" : "#1db954"} />
+    <use href="#icon-check" />
   </svg>
 </button>
 
@@ -33,11 +33,11 @@
     box-shadow: #111 0 0 10px 5px;
     background: #eee;
     will-change: transform;
-    transition: transform 200ms;
+    transition: all 200ms;
   }
 
   button:disabled {
-    background: #191414;
+    opacity: 0;
   }
 
   button svg {
@@ -45,11 +45,11 @@
     height: 100%;
   }
 
-  button:hover:not(:disabled) svg {
-    transform: scale(1.1);
+  button:hover:not(:disabled) {
+    transform: translate(-50%, -50%) scale(1.05);
   }
 
-  button:active:not(:disabled) svg {
-    transform: scale(0.95);
+  button:active:not(:disabled) {
+    transform: translate(-50%, -50%) scale(0.95);
   }
 </style>
