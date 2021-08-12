@@ -7,10 +7,16 @@ import {
   Subscriber,
   writable,
 } from "svelte/store";
-import { fetchPlaylists } from "../api";
+import { fetchPlaylists, play } from "../api";
 
 export const playlists = readable<Playlist[]>([], (set) => {
   loadPlaylists(set);
+});
+
+export const listedPlaylists = writable<Playlist[]>([], (set) => {
+  playlists.subscribe((playlists) => {
+    set(playlists.filter((p) => p.name !== "INBOX"));
+  });
 });
 
 export const selectedPlaylists = writable<Playlist[]>([]);

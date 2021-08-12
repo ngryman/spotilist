@@ -7,4 +7,6 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [svelte()],
+  // https://github.com/EmilTholin/svelte-routing/pull/200
+  optimizeDeps: { exclude: ["svelte-routing"] },
 });

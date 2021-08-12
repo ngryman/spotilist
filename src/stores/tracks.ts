@@ -1,6 +1,6 @@
 import type { Playlist, Track } from "../types";
 import { get, writable } from "svelte/store";
-import { inboxPlaylist } from "./playlists";
+import { inboxPlaylist, listedPlaylists } from "./playlists";
 import {
   addTrackToPlaylist,
   loadTracksOf,
@@ -17,12 +17,22 @@ export const inboxTracks = writable<Track[]>([], (set) => {
   });
 });
 
-export async function addTrackToPlaylists(track: Track, playlists: Playlist[]) {
-  const inbox = get(inboxPlaylist);
-  console.log(inbox);
+export async function addTrackToPlaylists(
+  track: Track,
+  targetPlaylists: Playlist[]
+) {
+  listedPlaylists.update((playlists) =>
+    playlists.map((playlist) => ({
+      ...playlist,
+      total_tracks: targetPlaylists.find((p) => p.id === playlist.id)
+        ? playlist.total_tracks + 1
+        : playlist.total_tracks,
+    }))
+  );
 
+  const inbox = get(inboxPlaylist);
   await Promise.all([
-    ...playlists.map((playlist) => addTrackToPlaylist(track, playlist)),
+    ...targetPlaylists.map((playlist) => addTrackToPlaylist(track, playlist)),
     removeTrackFromPlaylist(track, inbox),
   ]);
 }

@@ -1,17 +1,15 @@
 <script lang="ts">
   import InboxTracks from "./components/InboxTracks.svelte";
   import PlaylistItem from "./components/PlaylistItem.svelte";
-  import { playlists } from "./stores/playlists";
   import ApplyButton from "./components/ApplyButton.svelte";
-
-  $: listingPlaylist = $playlists.filter((p) => p.name !== "INBOX");
+  import { listedPlaylists } from "./stores/playlists";
 </script>
 
 <main>
   <InboxTracks />
   <article>
     <ul>
-      {#each listingPlaylist as playlist}
+      {#each $listedPlaylists as playlist}
         <PlaylistItem {playlist} />
       {/each}
     </ul>

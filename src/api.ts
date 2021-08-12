@@ -1,5 +1,8 @@
 import type { Device, Playlist, Track } from "./types";
-import { API_TOKEN } from "./constants";
+
+import { CLIENT_ID } from "./constants";
+
+let accessToken: string;
 
 export async function fetchPlaylists(): Promise<Playlist[]> {
   const { items } = await fetchApi("me/playlists", {
@@ -52,7 +55,7 @@ export async function addTrackToPlaylist(
   track: Track,
   playlist: Playlist
 ): Promise<void> {
-  fetchApi(
+  await fetchApi(
     `playlists/${playlist.id}/tracks?position=0&uris=spotify:track:${track.id}`,
     {
       method: "POST",
@@ -64,7 +67,7 @@ export async function removeTrackFromPlaylist(
   track: Track,
   playlist: Playlist
 ): Promise<void> {
-  fetchApi(`playlists/${playlist.id}/tracks`, {
+  await fetchApi(`playlists/${playlist.id}/tracks`, {
     method: "DELETE",
     body: {
       tracks: [{ uri: `spotify:track:${track.id}` }],
@@ -78,13 +81,57 @@ export async function fetchDevices(): Promise<Device[]> {
 }
 
 export async function play(device: Device, track: Track): Promise<void> {
-  fetchApi(`me/player/play?device_id=${device.id}`, {
+  await fetchApi(`me/player/play?device_id=${device.id}`, {
     method: "PUT",
     body: {
       uris: [`spotify:track:${track.id}`],
-      position_ms: 10000,
+      position_ms: 60000,
     },
   });
+}
+
+export async function authorize() {
+  // 1. Check we didn't get called back by Spotify with an error...
+  const callbackParams = new URLSearchParams(location.search);
+  if (callbackParams.has("error")) {
+    alert(callbackParams.get("error"));
+    return;
+  }
+
+  // 2. ... or with an actual token
+  const callbackData = new URLSearchParams(location.hash.replace("#", "?"));
+  if (callbackData.has("access_token")) {
+    const state = callbackData.get("state");
+    const storedState = localStorage.getItem("classify:state");
+    if (state !== storedState) {
+      alert("You're not you!");
+      return;
+    }
+
+    const token = callbackData.get("access_token");
+    accessToken = token;
+    localStorage.removeItem("classify:state");
+
+    history.replaceState({}, "", "/");
+    return;
+  }
+
+  // 3. Start the OAuth implicit grant flow
+  const state = Math.random().toString().slice(2);
+  localStorage.setItem("classify:state", state);
+
+  const search = {
+    client_id: CLIENT_ID,
+    response_type: "token",
+    redirect_uri: location.origin,
+    state,
+    scope: encodeURI(
+      "playlist-read-private user-read-playback-state user-modify-playback-state"
+    ),
+  };
+  const searchParams = new URLSearchParams(search).toString();
+
+  location.replace(`https://accounts.spotify.com/authorize?${searchParams}`);
 }
 
 type FetchApiOptions = {
@@ -108,7 +155,7 @@ async function fetchApi<T>(
     {
       method,
       headers: {
-        authorization: `Bearer ${API_TOKEN}`,
+        authorization: `Bearer ${accessToken}`,
       },
       body: body ? JSON.stringify(body) : undefined,
     }
