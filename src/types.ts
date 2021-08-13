@@ -11,6 +11,7 @@ export type Track = {
   id: string;
   name: string;
   artist: string;
+  duration_ms: number;
   imageUrl: string;
   link: string;
 };
@@ -24,4 +25,9 @@ export type Device = {
   id: string;
   type: string;
   name: string;
+};
+
+export type PlaybackState = {
+  isPlaying: boolean;
+  position: number;
 };

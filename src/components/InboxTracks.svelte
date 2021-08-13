@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { currentTrack, inboxTracks } from "../stores/tracks";
+  import { inboxTracks } from "../stores/tracks";
   import { CurrentTrack } from "./CurrentTrack";
-
-  $: $currentTrack = $inboxTracks[0];
+  import Track from "./Track.svelte";
 </script>
 
 <sidebar role="navigation">
@@ -11,7 +10,7 @@
       {#if i === 0}
         <li><CurrentTrack {track} /></li>
       {:else}
-        <li>{track.name}</li>
+        <li><Track {track} /></li>
       {/if}
     {/each}
   </ul>
@@ -24,7 +23,7 @@
   }
 
   ul {
-    padding: 10px;
+    padding: 20px;
     list-style: none;
   }
 

@@ -2,15 +2,95 @@
   import InboxTracks from "./components/InboxTracks.svelte";
   import PlaylistItem from "./components/PlaylistItem.svelte";
   import ApplyButton from "./components/ApplyButton.svelte";
-  import { listedPlaylists } from "./stores/playlists";
+  import {
+    listedPlaylists,
+    selectedPlaylistIndex,
+    togglePlaylist,
+  } from "./stores/playlists";
+
+  let playlistsList: HTMLUListElement;
+
+  function handleKeydown(e: KeyboardEvent) {
+    const style = window.getComputedStyle(playlistsList);
+    const stride = style
+      .getPropertyValue("grid-template-columns")
+      .split(" ").length;
+
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      e.stopPropagation();
+      if ($selectedPlaylistIndex === -1) {
+        $selectedPlaylistIndex = 0;
+      } else if ($selectedPlaylistIndex > 0) {
+        $selectedPlaylistIndex--;
+      }
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      e.stopPropagation();
+      if ($selectedPlaylistIndex === -1) {
+        $selectedPlaylistIndex = 0;
+      } else if ($selectedPlaylistIndex < $listedPlaylists.length - 1) {
+        $selectedPlaylistIndex++;
+      }
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      e.stopPropagation();
+      if ($selectedPlaylistIndex === -1) {
+        $selectedPlaylistIndex = 0;
+      } else if ($selectedPlaylistIndex > stride - 1) {
+        $selectedPlaylistIndex -= stride;
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      e.stopPropagation();
+      if ($selectedPlaylistIndex === -1) {
+        $selectedPlaylistIndex = 0;
+      } else if ($selectedPlaylistIndex + stride < $listedPlaylists.length) {
+        $selectedPlaylistIndex += stride;
+      }
+    }
+
+    if (e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      if ($selectedPlaylistIndex === -1) {
+        return;
+      }
+      togglePlaylist($listedPlaylists[$selectedPlaylistIndex]);
+    }
+  }
+
+  function handleMouseMove(e: MouseEvent) {
+    let element = <HTMLElement>e.target;
+    while (
+      element.nodeName !== "PLAYLIST-ITEM" &&
+      element.parentElement !== null
+    ) {
+      element = element.parentElement;
+    }
+
+    if (element.nodeName !== "PLAYLIST-ITEM") return;
+
+    const index = Array.prototype.indexOf.call(
+      element.parentElement.children,
+      element
+    );
+    if (index !== $selectedPlaylistIndex) {
+      $selectedPlaylistIndex = index;
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleKeydown} on:mousemove={handleMouseMove} />
 
 <main>
   <InboxTracks />
   <article>
-    <ul>
-      {#each $listedPlaylists as playlist}
-        <PlaylistItem {playlist} />
+    <ul bind:this={playlistsList}>
+      {#each $listedPlaylists as playlist, i}
+        <PlaylistItem {playlist} selected={i === $selectedPlaylistIndex} />
       {/each}
     </ul>
     <ApplyButton />
@@ -24,6 +104,18 @@
     <symbol id="icon-play" viewBox="0 0 30 30">
       <polygon points="10,5 25,15 10,25" />
     </symbol>
+    <symbol id="icon-pause" viewBox="0 0 35 30">
+      <polygon points="10,5 15,5 15,25 10,25" />
+      <polygon points="20,5 25,5 25,25 20,25" />
+    </symbol>
+    <symbol id="icon-fast-forward" viewBox="0 0 35 30">
+      <polygon points="10,5 25,15 10,25" />
+      <polygon points="20,5 35,15 20,25" />
+    </symbol>
+    <symbol id="icon-fast-backward" viewBox="0 0 35 30">
+      <polygon points="25,5 10,15 25,25" />
+      <polygon points="15,5 0,15 15,25" />
+    </symbol>
   </svg>
 </main>
 
@@ -31,6 +123,7 @@
   :root {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 14px;
     color: #eee;
   }
 

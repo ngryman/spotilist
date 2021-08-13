@@ -19,7 +19,13 @@
   }
 
   img {
+    margin-bottom: 10px;
     width: 150px;
     height: 150px;
+  }
+
+  em {
+    font-style: normal;
+    color: #ccc;
   }
 </style>

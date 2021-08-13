@@ -7,7 +7,7 @@ import {
   Subscriber,
   writable,
 } from "svelte/store";
-import { fetchPlaylists, play } from "../api";
+import { fetchPlaylists } from "../api";
 
 export const playlists = readable<Playlist[]>([], (set) => {
   loadPlaylists(set);
@@ -19,7 +19,9 @@ export const listedPlaylists = writable<Playlist[]>([], (set) => {
   });
 });
 
-export const selectedPlaylists = writable<Playlist[]>([]);
+export const checkedPlaylists = writable<Playlist[]>([]);
+
+export const selectedPlaylistIndex = writable(-1);
 
 export const inboxPlaylist = derived<Readable<Playlist[]>, Playlist>(
   playlists,
@@ -37,11 +39,11 @@ async function loadPlaylists(set: Subscriber<Playlist[]>): Promise<void> {
 }
 
 export function togglePlaylist(playlist: Playlist) {
-  const selected = get(selectedPlaylists).find((p) => p.id === playlist.id);
+  const selected = get(checkedPlaylists).find((p) => p.id === playlist.id);
   if (!selected) {
-    selectedPlaylists.update((playlists) => [...playlists, playlist]);
+    checkedPlaylists.update((playlists) => [...playlists, playlist]);
   } else {
-    selectedPlaylists.update((playlists) =>
+    checkedPlaylists.update((playlists) =>
       playlists.filter((p) => p.id !== playlist.id)
     );
   }

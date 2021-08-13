@@ -4,16 +4,37 @@
     currentTrack,
     inboxTracks,
   } from "../stores/tracks";
-  import { selectedPlaylists } from "../stores/playlists";
+  import { checkedPlaylists, selectedPlaylistIndex } from "../stores/playlists";
+  import { playbackState, playTrack } from "../stores/playback";
 
-  $: disabled = $selectedPlaylists.length === 0;
+  $: disabled = $checkedPlaylists.length === 0;
+
+  function apply() {
+    addTrackToPlaylists($currentTrack, $checkedPlaylists);
+    $inboxTracks = $inboxTracks.slice(1);
+
+    $checkedPlaylists = [];
+    $selectedPlaylistIndex = 0;
+
+    $playbackState.position = 0;
+    if ($playbackState.isPlaying) {
+      playTrack($currentTrack, 0);
+    }
+  }
 
   function handleClick() {
-    addTrackToPlaylists($currentTrack, $selectedPlaylists);
-    $inboxTracks = $inboxTracks.slice(1);
-    $selectedPlaylists = [];
+    apply();
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === "Enter") {
+      e.stopPropagation();
+      apply();
+    }
   }
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <button {disabled} on:click={handleClick}>
   <svg xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +54,7 @@
     box-shadow: #111 0 0 10px 5px;
     background: #eee;
     will-change: transform;
-    transition: all 200ms;
+    transition: all 50ms;
   }
 
   button:disabled {
@@ -50,6 +71,6 @@
   }
 
   button:active:not(:disabled) {
-    transform: translate(-50%, -50%) scale(0.95);
+    transform: translate(-50%, -50%) scale(1);
   }
 </style>

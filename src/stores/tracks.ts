@@ -1,13 +1,11 @@
 import type { Playlist, Track } from "../types";
-import { get, writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import { inboxPlaylist, listedPlaylists } from "./playlists";
 import {
   addTrackToPlaylist,
   loadTracksOf,
   removeTrackFromPlaylist,
 } from "../api";
-
-export const currentTrack = writable<Track>();
 
 export const inboxTracks = writable<Track[]>([], (set) => {
   inboxPlaylist.subscribe(async (inbox) => {
@@ -16,6 +14,8 @@ export const inboxTracks = writable<Track[]>([], (set) => {
     set(tracks);
   });
 });
+
+export const currentTrack = derived(inboxTracks, (tracks) => tracks[0]);
 
 export async function addTrackToPlaylists(
   track: Track,

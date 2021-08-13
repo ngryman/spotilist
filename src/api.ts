@@ -29,24 +29,25 @@ export async function fetchPlaylists(): Promise<Playlist[]> {
 }
 
 export async function loadTracksOf(playlist: Playlist): Promise<Track[]> {
-  const fields = "items(track(id,name,href,album(images),artists(name)))";
+  const fields =
+    "items(track(id,name,href,duration_ms,album(images),artists(name)))";
   const { items } = await fetchApi(`playlists/${playlist.id}/tracks`, {
     search: {
       fields,
     },
   });
 
-  const tracks = items.map(({ track: item }) => {
-    return {
-      id: item.id,
-      name: item.name,
-      artist: item.artists[0].name,
-      imageUrl: item.album.images
+  const tracks = items.map(({ track: item }) => ({
+    id: item.id,
+    name: item.name,
+    artist: item.artists[0].name,
+    duration_ms: item.duration_ms,
+    imageUrl:
+      item.album.images.length > 0
         ? item.album.images[Math.min(1, item.album.images.length - 1)].url
         : "",
-      link: item.href,
-    };
-  });
+    link: item.href,
+  }));
 
   return tracks;
 }
@@ -80,14 +81,33 @@ export async function fetchDevices(): Promise<Device[]> {
   return devices;
 }
 
-export async function play(device: Device, track: Track): Promise<void> {
+export async function play(
+  device: Device,
+  track: Track,
+  position: number
+): Promise<void> {
   await fetchApi(`me/player/play?device_id=${device.id}`, {
     method: "PUT",
     body: {
       uris: [`spotify:track:${track.id}`],
-      position_ms: 60000,
+      position_ms: position,
     },
   });
+}
+
+export async function pause(device: Device): Promise<void> {
+  await fetchApi(`me/player/pause?device_id=${device.id}`, {
+    method: "PUT",
+  });
+}
+
+export async function seek(device: Device, position: number): Promise<void> {
+  await fetchApi(
+    `me/player/seek?device_id=${device.id}&position_ms=${Math.round(position)}`,
+    {
+      method: "PUT",
+    }
+  );
 }
 
 export async function authorize() {
