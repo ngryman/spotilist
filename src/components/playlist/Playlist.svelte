@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Playlist } from "../types";
-  import { checkedPlaylists, togglePlaylist } from "../stores/playlists";
-  import playlistImg from "../assets/playlist.svg";
+  import type { Playlist } from "@types";
+  import { checkedPlaylists, togglePlaylist } from "@stores/playlists";
+  import playlistImg from "@assets/playlist.svg";
 
   export let playlist: Playlist;
   export let selected = false;
@@ -13,16 +13,16 @@
   }
 </script>
 
-<playlist-item class:checked class:selected on:click={handleClick}>
+<playlist class:checked class:selected on:click={handleClick}>
   <img src={playlist.imageUrl || playlistImg} alt="" />
   <span>{playlist.name} <em>({playlist.total_tracks})</em></span>
   <svg xmlns="http://www.w3.org/2000/svg">
     <use href="#icon-check" fill="#242424" />
   </svg>
-</playlist-item>
+</playlist>
 
 <style>
-  playlist-item {
+  playlist {
     position: relative;
     /* box-shadow: #111 4px 4px 4px; */
     border-radius: 6px;
@@ -35,19 +35,19 @@
     user-select: none;
   }
 
-  playlist-item.selected {
+  playlist.selected {
     background: #333;
     border-color: #666;
   }
 
-  playlist-item.checked {
+  playlist.checked {
     box-shadow: none;
     background: #eee;
     color: #242424;
     animation: push 200ms ease-out;
   }
 
-  playlist-item.checked.selected {
+  playlist.checked.selected {
     border-color: transparent;
     opacity: 0.8;
   }

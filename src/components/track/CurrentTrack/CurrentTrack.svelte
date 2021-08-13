@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Track } from "../../types";
+  import type { Track } from "@types";
   import Playback from "./Playback.svelte";
   import TrackPreview from "./TrackPreview.svelte";
 

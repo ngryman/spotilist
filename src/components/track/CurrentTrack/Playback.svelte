@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { currentTrack } from "../../stores/tracks";
+  import { onMount } from "svelte";
+  import { currentTrack } from "@stores/tracks";
   import {
     pauseTrack,
     playbackState,
     playTrack,
     seekTrack,
-  } from "../../stores/playback";
-  import { onMount } from "svelte";
+  } from "@stores/playback";
 
   let rafId = 0;
   let previousTimestamp = 0;

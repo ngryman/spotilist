@@ -3,9 +3,9 @@
     addTrackToPlaylists,
     currentTrack,
     inboxTracks,
-  } from "../stores/tracks";
-  import { checkedPlaylists, selectedPlaylistIndex } from "../stores/playlists";
-  import { playbackState, playTrack } from "../stores/playback";
+  } from "@stores/tracks";
+  import { checkedPlaylists, selectedPlaylistIndex } from "@stores/playlists";
+  import { playbackState, playTrack } from "@stores/playback";
 
   $: disabled = $checkedPlaylists.length === 0;
 

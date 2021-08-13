@@ -7,6 +7,15 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [svelte()],
+  resolve: {
+    alias: [
+      { find: "@assets", replacement: "/src/assets" },
+      { find: "@components", replacement: "/src/components" },
+      { find: "@stores", replacement: "/src/stores" },
+      { find: "@api", replacement: "/src/api" },
+      { find: "@types", replacement: "/src/types" },
+    ],
+  },
   // https://github.com/EmilTholin/svelte-routing/pull/200
   optimizeDeps: { exclude: ["svelte-routing"] },
 });
