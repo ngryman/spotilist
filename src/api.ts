@@ -1,10 +1,14 @@
-import type { Device, Playlist, Track } from "./types";
+import type { Device, Playlist, Track, User } from "./types";
 
 const CLIENT_ID = "abb2dad84deb48998ca4f526a7c0cc2f";
 
 let accessToken: string;
 
-export async function fetchPlaylists(): Promise<Playlist[]> {
+export async function fetchUser(): Promise<User> {
+  return await fetchApi("me");
+}
+
+export async function fetchPlaylists(user: User): Promise<Playlist[]> {
   const { items } = await fetchApi("me/playlists", {
     search: {
       limit: 50,
@@ -12,7 +16,7 @@ export async function fetchPlaylists(): Promise<Playlist[]> {
   });
 
   const playlists = items
-    .filter((item: any) => item.owner.display_name === "ngryman")
+    .filter((item: any) => item.owner.id === user.id)
     .map((item: any) => ({
       id: item.id,
       name: item.name,

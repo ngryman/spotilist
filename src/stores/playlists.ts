@@ -7,7 +7,7 @@ import {
   Subscriber,
   writable,
 } from "svelte/store";
-import { fetchPlaylists } from "../api";
+import { fetchPlaylists, fetchUser } from "../api";
 
 export const playlists = readable<Playlist[]>([], (set) => {
   loadPlaylists(set);
@@ -34,7 +34,8 @@ export const inboxPlaylist = derived<Readable<Playlist[]>, Playlist>(
 );
 
 async function loadPlaylists(set: Subscriber<Playlist[]>): Promise<void> {
-  const playlists = await fetchPlaylists();
+  const user = await fetchUser();
+  const playlists = await fetchPlaylists(user);
   set(playlists);
 }
 

@@ -1,3 +1,8 @@
+export type User = {
+  id: string;
+  display_name: string;
+};
+
 export type Playlist = {
   id: string;
   name: string;
