@@ -132,7 +132,7 @@ async function authorize() {
     accessToken = token;
     localStorage.removeItem("spotilist:state");
 
-    history.replaceState({}, "", "/");
+    history.replaceState({}, "", import.meta.env.BASE_URL);
     return;
   }
 
