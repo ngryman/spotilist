@@ -150,7 +150,7 @@ async function authorize() {
     redirect_uri: encodeURI(`${location.origin}${import.meta.env.BASE_URL}`),
     state,
     scope: encodeURI(
-      "playlist-read-private user-read-playback-state user-modify-playback-state"
+      "playlist-read-private playlist-modify-private user-read-playback-state user-modify-playback-state"
     ),
   };
   const searchParams = new URLSearchParams(search).toString();
