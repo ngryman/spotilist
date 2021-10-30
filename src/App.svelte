@@ -1,6 +1,7 @@
 <script lang="ts">
   import { TrackList } from "@components/track";
   import { PlaylistGrid } from "@components/playlist";
+  import ApplyButton from "@components/ApplyButton.svelte";
 </script>
 
 <main>
@@ -9,6 +10,7 @@
   </nav>
   <article>
     <PlaylistGrid />
+    <ApplyButton />
   </article>
 </main>
 
