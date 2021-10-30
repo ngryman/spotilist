@@ -110,7 +110,7 @@ export async function seek(device: Device, position: number): Promise<void> {
   );
 }
 
-export async function authorize() {
+async function authorize() {
   // 1. Check we didn't get called back by Spotify with an error...
   const callbackParams = new URLSearchParams(location.search);
   if (callbackParams.has("error")) {
@@ -164,10 +164,12 @@ async function fetchApi<T>(
   path: string,
   options: FetchApiOptions = {}
 ): Promise<T> {
+  if (!accessToken) {
+    await authorize();
+  }
+
   const { method = "GET", search = {}, body } = options;
-
   const searchParams = new URLSearchParams(search).toString();
-
   const res = await fetch(
     `https://api.spotify.com/v1/${path}${
       searchParams ? `?${searchParams}` : ""
