@@ -59,14 +59,6 @@
     pointer-events: none;
   }
 
-  playlist-item.checked img {
-    opacity: 0.3;
-  }
-
-  playlist-item.checked span {
-    opacity: 0.8;
-  }
-
   svg {
     position: absolute;
     top: 0;
@@ -76,10 +68,6 @@
     border-radius: 50%;
     background: #eee;
     opacity: 0;
-  }
-
-  playlist-item.checked svg {
-    opacity: 1;
   }
 
   @keyframes push {
