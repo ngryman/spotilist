@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy } from "svelte";
   import { currentTrack } from "@stores/tracks";
   import { pauseTrack, playback, playTrack, seekTrack } from "@stores/playback";
 
@@ -8,10 +8,8 @@
 
   $: displayedPosition = Math.floor($playback.position / 1000) * 1000;
 
-  onMount(() => {
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
+  onDestroy(() => {
+    cancelAnimationFrame(rafId);
   });
 
   function tick(timestamp: number) {
