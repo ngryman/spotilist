@@ -1,6 +1,12 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { currentTrack } from "@stores/tracks";
+  import {
+    currentTrack,
+    currentTrackIndex,
+    inboxTracks,
+    nextTrack,
+    previousTrack,
+  } from "@stores/tracks";
   import { pauseTrack, playback, playTrack, seekTrack } from "@stores/playback";
 
   let rafId = 0;
@@ -28,6 +34,7 @@
   }
 
   function playPause() {
+    console.log($playback.isPlaying);
     if (!$playback.isPlaying) {
       playTrack($currentTrack, $playback.position);
     } else {
@@ -50,19 +57,43 @@
     seekTrack($playback.position);
   }
 
+  function next() {
+    nextTrack();
+
+    if ($playback.isPlaying) {
+      playTrack($currentTrack, 0);
+    } else {
+      $playback.position = 0;
+    }
+  }
+
+  function previous() {
+    previousTrack();
+
+    if ($playback.isPlaying) {
+      playTrack($currentTrack, 0);
+    } else {
+      $playback.position = 0;
+    }
+  }
+
   function handleKeydown(e: KeyboardEvent) {
+    e.stopPropagation();
     switch (e.key) {
       case "s":
-        e.stopPropagation();
         playPause();
         break;
       case "a":
-        e.stopPropagation();
         seek(-30);
         break;
       case "d":
-        e.stopPropagation();
         seek(+30);
+        break;
+      case "w":
+        next();
+        break;
+      case "q":
+        previous();
         break;
     }
   }

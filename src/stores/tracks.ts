@@ -1,5 +1,5 @@
 import type { Playlist, Track } from "../types";
-import { derived, get, writable } from "svelte/store";
+import { derived, get, Writable, writable } from "svelte/store";
 import { inboxPlaylist, listedPlaylists } from "./playlists";
 import {
   addTrackToPlaylist,
@@ -15,7 +15,15 @@ export const inboxTracks = writable<Track[]>([], (set) => {
   });
 });
 
-export const currentTrack = derived(inboxTracks, (tracks) => tracks[0]);
+export const currentTrackIndex = writable<number>(0);
+
+export const currentTrack = derived<
+  [Writable<Track[]>, Writable<number>],
+  Track
+>(
+  [inboxTracks, currentTrackIndex],
+  ([tracks, currentTrackIndex]) => tracks[currentTrackIndex]
+);
 
 export async function addTrackToPlaylists(
   track: Track,
@@ -35,4 +43,16 @@ export async function addTrackToPlaylists(
     ...targetPlaylists.map((playlist) => addTrackToPlaylist(track, playlist)),
     removeTrackFromPlaylist(track, inbox),
   ]);
+}
+
+export async function nextTrack() {
+  if (get(currentTrackIndex) < get(inboxTracks).length - 1) {
+    currentTrackIndex.update((index) => index + 1);
+  }
+}
+
+export async function previousTrack() {
+  if (get(currentTrackIndex) > 0) {
+    currentTrackIndex.update((index) => index - 1);
+  }
 }

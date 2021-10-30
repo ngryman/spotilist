@@ -22,6 +22,7 @@ export async function playTrack(track: Track, position: number): Promise<void> {
     if (devices.length === 0) {
       alert("Please start Spotify on your computer");
     }
+    playback.update((playback) => ({ ...playback, position }));
     play(devices[0], track, position);
   });
 }
