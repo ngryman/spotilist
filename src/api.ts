@@ -143,7 +143,7 @@ async function authorize() {
   const search = {
     client_id: CLIENT_ID,
     response_type: "token",
-    redirect_uri: `${location.origin}${import.meta.env.BASE_URL}`,
+    redirect_uri: encodeURI(`${location.origin}${import.meta.env.BASE_URL}`),
     state,
     scope: encodeURI(
       "playlist-read-private user-read-playback-state user-modify-playback-state"
