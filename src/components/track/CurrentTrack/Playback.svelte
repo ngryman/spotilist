@@ -1,17 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { currentTrack } from "@stores/tracks";
-  import {
-    pauseTrack,
-    playbackState,
-    playTrack,
-    seekTrack,
-  } from "@stores/playback";
+  import { pauseTrack, playback, playTrack, seekTrack } from "@stores/playback";
 
   let rafId = 0;
   let previousTimestamp = 0;
 
-  $: displayedPosition = Math.floor($playbackState.position / 1000) * 1000;
+  $: displayedPosition = Math.floor($playback.position / 1000) * 1000;
 
   onMount(() => {
     return () => {
@@ -26,35 +21,35 @@
       previousTimestamp = timestamp;
     }
 
-    $playbackState.position += timestamp - previousTimestamp;
-    if ($playbackState.position > $currentTrack.duration_ms) {
-      $playbackState.position = 0;
+    $playback.position += timestamp - previousTimestamp;
+    if ($playback.position > $currentTrack.duration_ms) {
+      $playback.position = 0;
     }
 
     previousTimestamp = timestamp;
   }
 
   function playPause() {
-    if (!$playbackState.isPlaying) {
-      playTrack($currentTrack, $playbackState.position);
+    if (!$playback.isPlaying) {
+      playTrack($currentTrack, $playback.position);
     } else {
       pauseTrack();
     }
 
-    $playbackState.isPlaying = !$playbackState.isPlaying;
+    $playback.isPlaying = !$playback.isPlaying;
     rafId = requestAnimationFrame(tick);
   }
 
   function seek(duration: number) {
-    $playbackState.position += duration * 1000;
+    $playback.position += duration * 1000;
 
-    if ($playbackState.position < 0) {
-      $playbackState.position = 0;
-    } else if ($playbackState.position > $currentTrack.duration_ms) {
-      $playbackState.position = $currentTrack.duration_ms;
+    if ($playback.position < 0) {
+      $playback.position = 0;
+    } else if ($playback.position > $currentTrack.duration_ms) {
+      $playback.position = $currentTrack.duration_ms;
     }
 
-    seekTrack($playbackState.position);
+    seekTrack($playback.position);
   }
 
   function handleKeydown(e: KeyboardEvent) {
@@ -87,7 +82,7 @@
   <button class="play" on:click={playPause}>
     <svg xmlns="http://www.w3.org/2000/svg">
       <use
-        href={$playbackState.isPlaying ? "#icon-pause" : "#icon-play"}
+        href={$playback.isPlaying ? "#icon-pause" : "#icon-play"}
         fill="#111"
       />
     </svg>

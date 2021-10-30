@@ -1,20 +1,20 @@
-import type { Device, PlaybackState, Track } from "../types";
+import type { Device, Playback, Track } from "../types";
 import { Subscriber, writable } from "svelte/store";
 import { fetchDevices, pause, play, seek } from "../api";
 
-export const devices = writable<Device[]>(undefined, (set) => {
+const devices = writable<Device[]>(undefined, (set) => {
   loadDevices(set);
-});
-
-export const playbackState = writable<PlaybackState>({
-  isPlaying: false,
-  position: 0,
 });
 
 async function loadDevices(set: Subscriber<Device[]>): Promise<void> {
   const playlists = await fetchDevices();
   set(playlists);
 }
+
+export const playback = writable<Playback>({
+  isPlaying: false,
+  position: 0,
+});
 
 export async function playTrack(track: Track, position: number): Promise<void> {
   devices.subscribe((devices) => {

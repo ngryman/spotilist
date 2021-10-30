@@ -5,7 +5,7 @@
     inboxTracks,
   } from "@stores/tracks";
   import { checkedPlaylists, selectedPlaylistIndex } from "@stores/playlists";
-  import { playbackState, playTrack } from "@stores/playback";
+  import { playback, playTrack } from "@stores/playback";
 
   $: disabled = $checkedPlaylists.length === 0;
 
@@ -16,8 +16,8 @@
     $checkedPlaylists = [];
     $selectedPlaylistIndex = 0;
 
-    $playbackState.position = 0;
-    if ($playbackState.isPlaying) {
+    $playback.position = 0;
+    if ($playback.isPlaying) {
       playTrack($currentTrack, 0);
     }
   }

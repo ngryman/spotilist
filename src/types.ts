@@ -27,7 +27,7 @@ export type Device = {
   name: string;
 };
 
-export type PlaybackState = {
+export type Playback = {
   isPlaying: boolean;
   position: number;
 };
