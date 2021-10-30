@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { inboxTracks } from "@stores/tracks";
+  import { inboxTracks, currentTrackIndex, currentTrack } from "@stores/tracks";
   import { CurrentTrack, Track } from "@components/track";
 </script>
 
 <ul>
+  {#if $currentTrack}
+    <li><CurrentTrack track={$currentTrack} /></li>
+  {/if}
   {#each $inboxTracks as track, i}
-    {#if i === 0}
-      <li><CurrentTrack {track} /></li>
-    {:else}
-      <li><Track {track} /></li>
-    {/if}
+    <li><Track {track} current={i === $currentTrackIndex} /></li>
   {/each}
 </ul>
 
@@ -21,7 +20,7 @@
 
   li {
     overflow: hidden;
-    line-height: 1.5rem;
+    line-height: 1.8rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
