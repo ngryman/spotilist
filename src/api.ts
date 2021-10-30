@@ -1,6 +1,6 @@
 import type { Device, Playlist, Track } from "./types";
 
-import { CLIENT_ID } from "./constants";
+const CLIENT_ID = "abb2dad84deb48998ca4f526a7c0cc2f";
 
 let accessToken: string;
 
