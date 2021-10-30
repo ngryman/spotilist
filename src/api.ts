@@ -122,7 +122,7 @@ async function authorize() {
   const callbackData = new URLSearchParams(location.hash.replace("#", "?"));
   if (callbackData.has("access_token")) {
     const state = callbackData.get("state");
-    const storedState = localStorage.getItem("classify:state");
+    const storedState = localStorage.getItem("spotilist:state");
     if (state !== storedState) {
       alert("You're not you!");
       return;
@@ -130,7 +130,7 @@ async function authorize() {
 
     const token = callbackData.get("access_token");
     accessToken = token;
-    localStorage.removeItem("classify:state");
+    localStorage.removeItem("spotilist:state");
 
     history.replaceState({}, "", "/");
     return;
@@ -138,7 +138,7 @@ async function authorize() {
 
   // 3. Start the OAuth implicit grant flow
   const state = Math.random().toString().slice(2);
-  localStorage.setItem("classify:state", state);
+  localStorage.setItem("spotilist:state", state);
 
   const search = {
     client_id: CLIENT_ID,

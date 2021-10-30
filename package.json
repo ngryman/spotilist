@@ -1,6 +1,7 @@
 {
-  "name": "classify",
+  "name": "spotilist",
   "version": "0.0.0",
+  "description": "Organize your Spotify playlists.",
   "type": "module",
   "scripts": {
     "dev": "vite",
